@@ -5,12 +5,32 @@ import static io.restassured.RestAssured.given;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import core.BaseTeste;
 import io.restassured.RestAssured;
 
 public class BarrigaTestes extends BaseTeste {
+	
+	private String TOKEN;
+	
+	@Before
+	public void login() {
+		// extracao do token
+		Map<String, String> login = new HashMap<>();
+		login.put("email", "rock@lee.com.br");
+		login.put("senha", "1234");
+		
+		TOKEN = given()
+			.body(login)
+		.when()
+			.post("/signin")
+		.then()
+			.statusCode(200)
+			.extract().path("token")
+		;
+	}
 	
 	@Test
 	public void naoDeveAcessarAPISemToken() {
@@ -24,26 +44,9 @@ public class BarrigaTestes extends BaseTeste {
 
 	
 	@Test
-	public void inserirConta() {
-		
-		// extracao do token
-		Map<String, String> login = new HashMap<>();
-		login.put("email", "rock@lee.com.br");
-		login.put("senha", "1234");
-		
-		String token = given()
-			.body(login)
-		.when()
-			.post("/signin")
-		.then()
-			.statusCode(200)
-			.extract().path("token")
-		;
-		System.out.println(token);
-		
-		// incluir a conta
+	public void inserirConta() {		
 		given()
-			.header("Authorization", "JWT " + token)
+			.header("Authorization", "JWT " + TOKEN)
 			.body("{\"nome\": \"conta RockLee\"}")
 		.when()
 			.post("/contas")
@@ -51,6 +54,19 @@ public class BarrigaTestes extends BaseTeste {
 			.statusCode(201)
 		;
 	}
+	
+	@Test
+	public void alterarConta() {
+		given()
+			.header("Authorization", "JWT " + TOKEN)
+			.body("{\"nome\": \"conta RockLee alterada\"}")
+		.when()
+			.put("/contas/1052073")
+		.then()
+			.statusCode(200)
+		;
+	}
+	
 }
 
 
