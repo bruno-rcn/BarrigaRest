@@ -127,6 +127,28 @@ public class BarrigaTestes extends BaseTeste {
 		;
 	}
 	
+	@Test
+	public void inserirMovimentacaoComDataFutura() {
+		Movimentacao mov = new Movimentacao();
+		mov.setConta_id(1052073);
+		mov.setDescricao("Descricao da movimentacao");
+		mov.setEnvolvido("Envolvido na movimentacao");
+		mov.setTipo("REC");
+		mov.setData_transacao("03/02/2022");
+		mov.setData_pagamento("03/02/2022");
+		mov.setValor(100f);
+		mov.setStatus(true);
+		
+		given()
+			.header("Authorization", "JWT " + TOKEN)
+			.body(mov)
+		.when()
+			.post("/transacoes")
+		.then()
+			.statusCode(400)
+		;
+	}
+	
 }
 
 
