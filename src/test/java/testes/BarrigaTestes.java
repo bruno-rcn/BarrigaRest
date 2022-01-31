@@ -104,6 +104,29 @@ public class BarrigaTestes extends BaseTeste {
 		;
 	}
 	
+	@Test
+	public void validarCampoObrigatorioMovimentacao() {
+		given()
+			.header("Authorization", "JWT " + TOKEN)
+			.body("{}")
+		.when()
+			.post("/transacoes")
+		.then()
+			.statusCode(400)
+			.body("$", Matchers.hasSize(8))
+			.body("msg", Matchers.hasItems(
+					"Data da Movimentação é obrigatório",
+					"Data do pagamento é obrigatório",
+					"Descrição é obrigatório",
+					"Interessado é obrigatório",
+					"Valor é obrigatório",
+					"Valor deve ser um número",
+					"Conta é obrigatório",
+					"Situação é obrigatório"
+					))
+		;
+	}
+	
 }
 
 
