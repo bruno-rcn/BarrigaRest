@@ -173,6 +173,17 @@ public class BarrigaTestes extends BaseTeste {
 		;
 	}
 	
+	@Test
+	public void deletarMovimentacao() {
+		given()
+			.header("Authorization", "JWT " + TOKEN)
+		.when()
+			.delete("/movimentacoes/11588")
+		.then()
+			.statusCode(204)
+		;
+	}
+	
 }
 
 
