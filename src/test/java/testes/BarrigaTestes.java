@@ -149,6 +149,18 @@ public class BarrigaTestes extends BaseTeste {
 		;
 	}
 	
+	@Test
+	public void naoDeveDeletarContaContaComMovimentacao() {
+		given()
+			.header("Authorization", "JWT " + TOKEN)
+		.when()
+			.delete("/contas/1052073")
+		.then()
+			.statusCode(500)
+			.body("constraint", Matchers.is("transacoes_conta_id_foreign"))
+		;
+	}
+	
 }
 
 
