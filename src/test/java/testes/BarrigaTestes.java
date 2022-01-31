@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import core.BaseTeste;
 import io.restassured.RestAssured;
+import utils.Movimentacao;
 
 public class BarrigaTestes extends BaseTeste {
 	
@@ -78,6 +79,28 @@ public class BarrigaTestes extends BaseTeste {
 		.then()
 			.statusCode(400)
 			.body("error", Matchers.is("Já existe uma conta com esse nome!"))
+		;
+	}
+	
+	@Test
+	public void inserirMovimentacao() {
+		Movimentacao mov = new Movimentacao();
+		mov.setConta_id(1052073);
+		mov.setDescricao("Descricao da movimentacao");
+		mov.setEnvolvido("Envolvido na movimentacao");
+		mov.setTipo("REC");
+		mov.setData_transacao("01/01/2000");
+		mov.setData_pagamento("10/05/2010");
+		mov.setValor(100f);
+		mov.setStatus(true);
+		
+		given()
+			.header("Authorization", "JWT " + TOKEN)
+			.body(mov)
+		.when()
+			.post("/transacoes")
+		.then()
+			.statusCode(201)
 		;
 	}
 	
